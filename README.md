@@ -14,26 +14,6 @@ Filtragem por Status: Filtre a lista de tarefas para exibir apenas as tarefas co
 
 Persistência de Dados: As tarefas são armazenadas no Firestore, garantindo que os dados não sejam perdidos ao reiniciar a aplicação.
 
-⚙️ Estrutura do Projeto
-O projeto está organizado em duas pastas principais:
-
-mini-gerenciador-tarefas/
-├── backend/
-│ └── api/ # Aplicação NestJS (Backend)
-│ ├── src/ # Código-fonte do NestJS
-│ ├── Dockerfile # Dockerfile para o backend
-│ ├── package.json
-│ └── ...
-├── frontend/
-│ └── web/ # Aplicação Next.js (Frontend)
-│ ├── app/ # Código-fonte do Next.js (App Router)
-│ ├── public/
-│ ├── Dockerfile # Dockerfile para o frontend
-│ ├── package.json
-│ └── ...
-├── .gitignore # Arquivo para ignorar arquivos e pastas no Git
-├── docker-compose.yml # Arquivo para orquestrar os contêineres Docker
-└── README.md # Este arquivo de documentação
 
 🛠️ Tecnologias Utilizadas
 Backend:
@@ -75,10 +55,8 @@ Certifique-se de ter o Docker Desktop (ou o daemon do Docker) instalado e em exe
 1. Configuração do Projeto
    Clone o repositório:
 
-git clone https://github.com/SEU_USUARIO/seu-repositorio.git
+git clone https://github.com/Bruno90Barbosa/mini-gerenciador-tarefas
 cd seu-repositorio # Navegue para a pasta raiz do projeto clonado
-
-(Substitua SEU_USUARIO/seu-repositorio.git pelo link do seu repositório GitHub.)
 
 Configuração do Firebase/Firestore:
 Este projeto utiliza o Firestore para persistência de dados. Para que ele funcione, você precisa:
