@@ -1,0 +1,36 @@
+version: '3.8' # Versão da especificação do Docker Compose
+
+services:
+  backend:
+    build:
+      context: ./backend/api # Onde o Dockerfile do backend está localizado
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000" # Mapeia a porta 3000 do host para a porta 3000 do contêiner
+    volumes:
+      - ./backend/api:/usr/src/app # Monta o diretório local para desenvolvimento (opcional, mas útil)
+      - /usr/src/app/node_modules # Garante que node_modules dentro do contêiner não seja sobrescrito pelo volume
+    environment:
+      # Variáveis de ambiente para o backend (se necessário, ex: PORT)
+      NODE_ENV: production
+      PORT: 3000
+      # Se você tivesse credenciais do Firebase Admin aqui, elas iriam como variáveis de ambiente
+      # Ex: FIREBASE_PRIVATE_KEY: ${FIREBASE_PRIVATE_KEY}
+    restart: always # Reinicia o contêiner se ele parar
+
+  frontend:
+    build:
+      context: ./frontend/web # Onde o Dockerfile do frontend está localizado
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001" # Mapeia a porta 3001 do host para a porta 3001 do contêiner
+    volumes:
+      - ./frontend/web:/app # Monta o diretório local para desenvolvimento
+      - /app/node_modules # Garante que node_modules dentro do contêiner não seja sobrescrito pelo volume
+      - /app/.next # Garante que .next dentro do contêiner não seja sobrescrito pelo volume
+    depends_on:
+      - backend # Garante que o backend seja iniciado antes do frontend
+    environment:
+      # Variável de ambiente para o frontend, apontando para o serviço backend no Docker Compose
+      NEXT_PUBLIC_API_URL: http://backend:3000
+    restart: always # Reinicia o contêiner se ele parar
