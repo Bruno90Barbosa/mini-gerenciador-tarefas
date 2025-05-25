@@ -46,87 +46,9 @@ Docker: Para contêinerização das aplicações.
 
 Docker Compose: Para definir e executar aplicações Docker multi-contêiner.
 
-🚀 Como Executar o Projeto
-Siga estas instruções para configurar e executar a aplicação utilizando Docker Compose.
 
-Pré-requisitos
-Certifique-se de ter o Docker Desktop (ou o daemon do Docker) instalado e em execução em sua máquina.
 
-1. Configuração do Projeto
-   Clone o repositório:
-
-git clone https://github.com/Bruno90Barbosa/mini-gerenciador-tarefas
-cd seu-repositorio # Navegue para a pasta raiz do projeto clonado
-
-Configuração do Firebase/Firestore:
-Este projeto utiliza o Firestore para persistência de dados. Para que ele funcione, você precisa:
-
-Criar um Projeto Firebase: Vá para console.firebase.google.com e crie um novo projeto.
-
-Configurar o Firestore: No seu projeto Firebase, vá em "Firestore Database" e crie um banco de dados em modo de produção (ou teste, mas ajuste as regras de segurança).
-
-Regras de Segurança do Firestore: No Firestore, vá na aba "Rules" e publique as seguintes regras para permitir leitura e escrita na coleção de tarefas:
-
-rules_version = '2';
-service cloud.firestore {
-match /databases/{database}/documents {
-match /artifacts/{appId}/public/data/tarefas/{documentId} {
-allow read, write: if request.auth != null;
-}
-// Regras para dados privados (se aplicável, não usado diretamente neste exemplo)
-match /artifacts/{appId}/users/{userId}/{documents=\*\*} {
-allow read, write: if request.auth != null && request.auth.uid == userId;
-}
-}
-}
-
-Credenciais do Firebase Admin (para o Backend):
-
-No seu projeto Firebase, vá em "Project settings" (Configurações do projeto) -> "Service accounts" (Contas de serviço).
-
-Clique em "Generate new private key" (Gerar nova chave privada) e baixe o arquivo JSON.
-
-Renomeie este arquivo JSON para firebase-admin-credentials.json e coloque-o na pasta backend/api/.
-
-Importante: Este arquivo contém suas credenciais sensíveis. NÃO O COLOQUE NO CONTROLE DE VERSÃO GIT. Ele já está incluído no .gitignore do backend.
-
-No backend/api/src/main.ts, a inicialização do Firebase Admin usa a variável global \_\_firebase_config. Para rodar localmente fora do ambiente Canvas, você precisaria ajustar essa inicialização para carregar o arquivo JSON diretamente. Por exemplo:
-
-// src/main.ts (exemplo para rodar localmente fora do Canvas)
-// ...
-import \* as serviceAccount from '../firebase-admin-credentials.json'; // Ajuste o caminho conforme necessário
-
-// ...
-// Substitua a lógica de \_\_firebase_config por:
-admin.initializeApp({
-credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
-});
-console.log('Firebase Admin SDK inicializado com sucesso!');
-// ...
-
-Para o ambiente Canvas, a configuração atual do main.ts é suficiente, pois \_\_firebase_config é injetado.
-
-Configurações do Firebase Client (para o Frontend):
-
-No seu projeto Firebase, vá em "Project settings" (Configurações do projeto) -> "Your apps" (Seus apps) e selecione "Web".
-
-Copie o objeto de configuração do Firebase (contém apiKey, authDomain, projectId, etc.).
-
-Crie um arquivo .env.local na pasta frontend/web/.
-
-Cole a configuração do Firebase Client neste arquivo, prefixando cada chave com NEXT*PUBLIC*. Exemplo:
-
-NEXT_PUBLIC_API_KEY=AIzaSy...
-NEXT_PUBLIC_AUTH_DOMAIN=seu-projeto.firebaseapp.com
-NEXT_PUBLIC_PROJECT_ID=seu-projeto-id
-NEXT_PUBLIC_STORAGE_BUCKET=seu-projeto.appspot.com
-NEXT_PUBLIC_MESSAGING_SENDER_ID=...
-NEXT_PUBLIC_APP_ID=1:...
-NEXT_PUBLIC_MEASUREMENT_ID=G-...
-
-Importante: Este arquivo .env.local também contém informações sensíveis e já está incluído no .gitignore do frontend.
-
-2. Construção e Execução com Docker Compose
+1. Construção e Execução com Docker Compose
    Com as configurações do Firebase ajustadas, você pode construir e executar a aplicação.
 
 Navegue até a pasta raiz do projeto no seu terminal (onde o docker-compose.yml está):
